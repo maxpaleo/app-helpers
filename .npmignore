@@ -1,0 +1,11 @@
+node_modules/
+test/
+.github/
+src/
+.npmignore
+.gitignore
+tsconfig.json
+README.html
+media/
+*.tgz
+*.html

@@ -9,3 +9,4 @@ README.html
 media/
 *.tgz
 *.html
+.npmignore

@@ -1,46 +1,50 @@
-name: Publish npm package
+# name: Publish npm package
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - "../../index.ts"  # Triggers the workflow only when this specific file changes
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "src/**"         # Trigger workflow on changes in the src folder
+#       - "package.json"   # Trigger workflow on changes to package.json
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "21.4.0"
-          registry-url: "https://registry.npmjs.org/"
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: "21.4.0"
+#           registry-url: "https://registry.npmjs.org/"
 
-      - name: Configure Git
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+#       - name: Configure Git
+#         run: |
+#           git config --local user.email "action@github.com"
+#           git config --local user.name "GitHub Action"
 
-      - name: Install Dependencies
-        run: npm install
+#       - name: Install Dependencies
+#         run: npm install
 
-      - name: Clean dist directory
-        run: rm -rf dist/*
+#       - name: Clean dist directory
+#         run: rm -rf dist/*
 
-      - name: Compile TypeScript
-        run: tsc
+#       - name: Compile TypeScript
+#         run: tsc
 
-      - name: NPM Whoami and Dry Run Publish
-        run: |
-          npm whoami
-          npm publish --dry-run
+#       - name: NPM Whoami and Dry Run Publish
+#         run: |
+#           npm whoami
+#           npm publish --dry-run
 
-      - name: Build
-        run: npm run build
+#       - name: Build
+#         run: npm run build
 
-      - name: Publish to npm
-        run: npm publish --access public --tag paleo-helpers
+#       - name: Publish to npm
+#         run: |
+#           # Ensure main entry is set to dist/index.js
+#           jq '.main = "dist/index.js"' package.json > tmp.json && mv tmp.json package.json
+#           npm publish --access public --tag paleo-helpers

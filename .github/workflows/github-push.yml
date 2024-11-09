@@ -1,0 +1,49 @@
+name: Auto Commit Changes to app-helpers
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "../../index.ts"          # Monitor changes in the src folder
+      - "../../package.json"    # Monitor changes in package.json
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "21.4.0"
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Clean dist directory
+        run: rm -rf dist/*
+
+      - name: Compile TypeScript
+        run: npm run build
+
+      - name: Update package.json Main Entry
+        run: |
+          jq '.main = "dist/index.js"' package.json > tmp.json && mv tmp.json package.json
+
+      - name: Check for Changes
+        id: git_diff
+        run: |
+          git diff --exit-code || echo "Changes detected"
+
+      - name: Commit and Push Changes
+        if: steps.git_diff.outcome == 'failure'  # Only proceed if changes were detected
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json dist/
+          git commit -m "Update main entry to /dist/index.js and compile changes"
+          git push origin main

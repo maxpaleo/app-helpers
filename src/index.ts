@@ -11,7 +11,8 @@
  * - Create clipboard.copy + paste
  */
 
-// type SessionPath = `/session?redirect=${App.Paths.Paths}`;
+// type SessionPath = `/session?redirect=${App.Paths.Paths}`; New
+// New update
 
 export namespace AppHelpers {
   /**
